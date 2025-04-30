@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Form Pembelian</title>
+  <link rel="stylesheet" href="StyleForm.css" />
+</head>
+<body>
+  <header>
+    <h1>Form Pembelian - NPCI</h1>
+  </header>
+
+  <section class="form-pembelian">
+    <form id="purchaseForm">
+      <label for="nama">Nama Lengkap:</label>
+      <input type="text" id="nama" name="nama" required />
+
+      <label for="alamat">Alamat Pengiriman:</label>
+      <textarea id="alamat" name="alamat" required></textarea>
+
+      <label for="nomor">Nomor WhatsApp:</label>
+      <input type="tel" id="nomor" name="nomor" required pattern="08[0-9]{8,11}" />
+
+      <label for="pesanan">Pesanan Anda:</label>
+      <textarea id="pesanan" name="pesanan" readonly></textarea>
+
+      <label for="total">Total Harga:</label>
+      <input type="text" id="total" name="total" readonly />
+
+      <button type="submit">Kirim ke WhatsApp</button>
+    </form>
+  </section>
+
+  <footer>
+    <p>📍 Jl.Raya Hankam Puri Assadiyah, Kota Bekasi | ☎ 0821-3575-0744 </p>
+  </footer>
+
+  <script>
+    // Ambil data dari URL jika dikirim via query string (opsional)
+    window.onload = function () {
+      const urlParams = new URLSearchParams(window.location.search);
+      const pesanan = urlParams.get('pesanan');
+      const total = urlParams.get('total');
+
+      if (pesanan) document.getElementById("pesanan").value = decodeURIComponent(pesanan);
+      if (total) document.getElementById("total").value = "Rp " + decodeURIComponent(total);
+    };
+
+    document.getElementById("purchaseForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const nama = document.getElementById("nama").value;
+      const alamat = document.getElementById("alamat").value;
+      const nomor = document.getElementById("nomor").value;
+      const pesanan = document.getElementById("pesanan").value;
+      const total = document.getElementById("total").value;
+
+      const pesan = `Halo, saya ${nama} ingin memesan:\n${pesanan}\nTotal: ${total}\nAlamat: ${alamat}\nNo. WA: ${nomor}`;
+      const waUrl = `https://wa.me/6282135750744?text=${encodeURIComponent(pesan)}`;
+      window.open(waUrl, '_blank');
+    });
+  </script>
+</body>
+</html>
